@@ -1,0 +1,31 @@
+PS7: Data Pipeline Pseudocode
+Effect of traffic density and non-driving task difficulty on driver performance
+
+The texting app from Project 1 is a non-driving related task (NDRT), meaning that it is a secondary task imbedded within the primary automated driving task, using our driving simulator. IVs: This NDRT will vary in difficulty (none, short message, long message) across 3 traffic density conditions in the simulator (low, medium and high). DVs: The NDRT raw data consists directly of: time in seconds, relative time (from first engagement with the keyboard), text input (what is currently in the text field), and relative text input (real-time letter additions). I will strictly be focusing on these secondary task variables are for the pseudocode. 
+
+Summary measures we will want to compute: 
+From the texting data alone, it would require simply providing some descriptive statistics about:
+-time to completion for each text (and how this might differ based on message length)
+-accuracy of messages (and how this might differ based on message length)
+-average number of messages sent within a given duration of time (i.e. one “drive”, or simulator trial) (rate/speed of sending messages)
+
+Pseudocode in R:
+•Coders will prep data before inputting into R for 26 participants
+	-each participant will have one row for every trial: ptcp id, phrase id, text inputted, time to completion, time from beginning of experiment
+•Read in & merge all participant data
+Compute column “NDRT condition” which identify the texting condition that each participant experienced either short message (lower difficulty) or message (higher difficulty)
+	-e.g. participants 3,5,6,7,9 completed driving trials with no NDRT and with high difficulty NDRT, whereas participants 1,2,4,8,10 drove under no NDRT and low difficulty NDRT conditions
+	-if “phrase_id” = x, x, x, then add “low” in this column
+	else, add “high”
+•remove any missing data cases
+•group data by NDRT condition (subset dataframe)
+•Compute column for accuracy which codes messages as “accurate” or “inaccurate”
+	-use string comparison function- e.g.,== and != operators
+•get descriptive statistics for DVs, grouped by NDRT condition (use one of easy summarize functions via R libraries)
+	-mean time to completion for each message (message is sent)
+	-mean number of messages sent (how many phrase_ids completed, on average)
+	-mean accuracy
+•remove any outlier participants for each outcome variable, by group (+/-3 sd from mean)
+•rerun descriptive without outliers
+•test correlations between accuracy and message difficulty/length
+•If interesting, run mixed ANOVA to look at group differences
